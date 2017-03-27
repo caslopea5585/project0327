@@ -6,6 +6,8 @@ package file;
 
 import java.awt.FlowLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -14,7 +16,7 @@ import javax.swing.JFrame;
 
 public class FileWindow extends JFrame{
 	MyIcon folder_on, folder_off;
-	
+	ArrayList<MyPanel> zip_panel;
 	
 	public FileWindow() {
 		setLayout(new FlowLayout());
@@ -37,16 +39,31 @@ public class FileWindow extends JFrame{
 		
 		//제대로 붙을지 테스트
 		ArrayList<String> list = getDirList();
+		zip_panel= new ArrayList<MyPanel>();
+		
 		for(int i=0;i<list.size();i++){
 			String dirName = list.get(i);
 			MyPanel mp = new MyPanel(dirName, folder_off);
+			zip_panel.add(mp);
+			mp.bt.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					for(int z=0; z<zip_panel.size();z++){
+						zip_panel.get(z).bt.setIcon(folder_off);	
+					}
+					mp.bt.setIcon(folder_on);
+				}
+			});
 			add(mp);
 		}
+		
 		setSize(600,500);
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 	}
+
+	
+	
 	//원하는 경로의 하위 디렉토리  & 파일 구하기
 	public ArrayList getDirList(){
 		File file = new File("C:/");
